@@ -1,0 +1,221 @@
+################################################################################
+# Fichier de test des routes HTTP de l'API
+# Nécessite l'extension REST Client pour VSCode
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+################################################################################
+@endpoint = http://localhost:3000
+### 404
+
+GET {{ endpoint }}/categoryyy
+#########################
+#      CATEGORIES       #
+#########################
+### Liste des Catégories
+GET {{ endpoint }}/category
+
+### Récupérér une catégorie par son id qui n'existe pas
+GET {{ endpoint }}/category/123
+
+### Récupérér une catégorie par son id
+GET {{ endpoint }}/category/1
+
+### Récupérér une catégorie avec ses sous-catégories
+GET {{ endpoint }}/category/2/sub_category
+
+//### Créer une catégorie en erreur
+//POST {{ endpoint }}/category
+//content-type: application/json
+
+### Créer une catégorie
+POST {{ endpoint }}/category
+content-type: application/json
+
+{
+    "label": "Test de création d'une catégorie"
+}
+
+### Modifier une catégorie
+PATCH {{ endpoint }}/category/16
+content-type: application/json
+
+{
+    "label": "Test de modification d'une catégorie"
+}
+
+### Supprimer une catégorie par son id
+DELETE {{ endpoint }}/category/16
+
+
+
+### 404
+GET {{ endpoint }}/sub_categoryyy
+
+#########################
+#      SOUS-CATÉGORIES       #
+#########################
+### Liste des sous-catégories
+GET {{ endpoint }}/sub_category
+
+### Récupérér une sous-catégorie par son id qui n'existe pas
+GET {{ endpoint }}/sub_category/26
+
+### Récupérér une sous-catégorie par son id
+GET {{ endpoint }}/sub_category/24
+
+### Récupérér une sous-catégorie avec ses activités
+GET {{ endpoint }}/sub_category/2/activity
+
+//### Créer une sous-catégorie en erreur
+//POST {{ endpoint }}/sub_category
+//content-type: application/json
+//
+//{
+//    "label": "Test de création en erreur d'une sous-catégorie"
+//}
+
+### Créer une sous-catégorie
+POST {{ endpoint }}/sub_category
+content-type: application/json
+
+{
+    "label": "Test de création d'une sous-catégorie",
+    "category_id": 1
+}
+
+### Modifier une sous-catégorie
+PATCH {{ endpoint }}/sub_category/26
+content-type: application/json
+
+{
+    "label": "Test de modification d'une sous-catégorie", 
+    "category_id": 2
+}
+
+### Supprimer une sous-catégorie par son id
+DELETE {{ endpoint }}/sub_category/26
+
+
+
+### 404
+GET {{ endpoint }}/yyy
+
+#########################
+#         ACTIVITÉS         #
+#########################
+### Liste des activités
+GET {{ endpoint }}/activity
+
+### Récupérér une activité par son id qui n'existe pas
+GET {{ endpoint }}/activity/103
+
+### Récupérér une activité par son id
+GET {{ endpoint }}/activity/1
+
+//### Créer une activité en erreur
+//POST {{ endpoint }}/activity
+//content-type: application/json
+//
+//{
+//    "label": "Test de création en erreur d'une activité",
+//    "latitude": "27",
+//    "longitude": "31",
+//    "photo": "https://i.f1g.fr/media/cms/orig/2023/06/10/69056075512765ee22ba187b621dfdfcc0fb02acaa3b01cff220b5f8911ac0df.jpg",
+//    "sub_category_id": 1
+//}
+
+### Créer une activité
+POST {{ endpoint }}/activity
+content-type: application/json
+
+{
+    "label": "Test de création d'une activité",
+    "address": "Vers l'infini et aù delà",
+    "latitude": "27",
+    "longitude": "31",
+    "photo": "https://i.f1g.fr/media/cms/orig/2023/06/10/69056075512765ee22ba187b621dfdfcc0fb02acaa3b01cff220b5f8911ac0df.jpg",
+    "sub_category_id": 1
+}
+
+### Modifier une activité
+PATCH {{ endpoint }}/activity/104
+content-type: application/json
+
+{
+    "label": "Test de modification d'une activité",
+    "address": "Vers l'infini et aù delà",
+    "latitude": "27",
+    "longitude": "31",
+    "photo": "https://i.f1g.fr/media/cms/orig/2023/06/10/69056075512765ee22ba187b621dfdfcc0fb02acaa3b01cff220b5f8911ac0df.jpg",
+    "sub_category_id": 1
+}
+
+### Supprimer une activité par son id
+DELETE {{ endpoint }}/activitY/104
+
+
+
+### 404
+GET {{ endpoint }}/yyy
+
+#########################
+#         MEMBERS          #
+#########################
+
+### Liste des membres
+GET {{ endpoint }}/member
+
+### Récupérér un/e membre par son id qui n'existe pas
+GET {{ endpoint }}/member/6
+
+### Récupérér un/e member par son id
+GET {{ endpoint }}/member/1
+
+//### Créer un/e membre en erreur
+//POST {{ endpoint }}/member
+//content-type: application/json
+//
+//{
+//    "firstname": "John",
+//    "lastname": "Doe",
+//    "email": "johndoe@gmail.com",
+//    "password": "password",
+//    "dateofbirth": "17/08/1985",
+//    "phone_number": "0133445566",
+//    "photo": "lien_photo",
+//    "address": "Les Vergers De La Plaine",
+//    "zipcode": "78240",
+//    "city": "Chambourcy",
+//    "country": "France"
+//}
+
+### Créer un/e membre
+POST {{ endpoint }}/register
+content-type: application/json
+
+{
+    "firstname": "John",
+    "email": "johndoe@gmail.fr", 
+    "password": "password"
+}
+
+### Modifier un/e membre
+PATCH {{ endpoint }}/member/6
+content-type: application/json
+
+{
+    "firstname": "Test de mofication",
+    "lastname": "Doe",
+    "email": "johndoe@gmail.com",
+    "password": "password",
+    "dateofbirth": "06/06/1966",
+    "phone_number": "0623456789",
+    "photo": "lien_photo",
+    "address": "Vers l'infini et au delà",
+    "zipcode": "66000",
+    "city": "NoWhere",
+    "country": "France"
+}
+
+### Supprimer un/e membre par son id
+DELETE {{ endpoint }}/member/6
+
