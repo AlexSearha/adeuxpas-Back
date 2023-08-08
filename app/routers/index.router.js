@@ -1,20 +1,15 @@
 import { Router } from "express";
 
+
 import activityController from "../controllers/activityController.js";
 import categoryController from "../controllers/categoryController.js";
 import loginController from "../controllers/loginController.js";
 import memberController from "../controllers/memberController.js";
-//import registerController from "../controllers/registerController.js";
 import subCategoryController from "../controllers/subCategoryController.js";
 import fetchYelpController from "../controllers/fetchYelpController.js";
 
 const router = Router();
 
-
-//Affichage page formulaire register : 
-
-//router.get("/register", registerController.form);
-//router.post("/register", registerController.register);
 
 //Members
 
@@ -22,16 +17,12 @@ const router = Router();
 router.get("/member", (memberController.getAllMembers));
 router.get("/member/:id(\\d+)", (memberController.getMemberByPk));
 router.post("/register", memberController.createMember);
-router.patch("/member", memberController.modifyMember);
-//router.post("/member", (memberController.createMember));
-//router.patch("/member/:id(\\d+)", (memberController.modifyMember));
+router.patch("/member/:id(\\d+)", memberController.modifyMember);
 router.delete("/member/:id(\\d+)", (memberController.deleteMember));
 
-//Authentification : 
+//Authentification
 
-//router.get("/login", loginController.index);
 router.post("/login", loginController.login);
-//router.get("/logout", loginController.logout);
 
 //Category
     
