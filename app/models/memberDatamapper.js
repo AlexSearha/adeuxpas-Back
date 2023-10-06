@@ -70,7 +70,7 @@ export default {
 			],
 		);
 
-		return insertMember.rows;
+		return insertMember.rows[0];
 
 	},
     

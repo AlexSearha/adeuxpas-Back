@@ -23,6 +23,7 @@ export default {
 			//return response.status(200).json("Success");
 			//JWT
 			let tokens = jwtTokens(users.rows[0]);
+			console.log(users.rows[0]);
 			response.cookie("refresh_token", tokens.refreshToken, { httpOnly: true });
 			response.json(tokens);
 

@@ -49,7 +49,7 @@ export default {
 			return undefined;
 		}
 
-		return findAllByPk.rows;
+		return findAllByPk.rows[0];
 	}, 
 
 	async insert(category) {

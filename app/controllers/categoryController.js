@@ -7,7 +7,7 @@ export default {
 		const categories = await categoryDatamapper.findAll();
 		console.log(categories);
 
-		return response.json(categories);
+		return response.status(200).json(categories);
 	},
     
 
@@ -20,7 +20,7 @@ export default {
 			return response.status(404).json({ error: "Catégorie inconnue" });
 		}
 
-		return response.json(category);
+		return response.status(200).json(category);
 	},
 
 
@@ -33,7 +33,7 @@ export default {
 			return response.status(400).json({ error: "Veuillez vérifier la saisie" });
 		}
 
-		return response.json(categoryWithSubCategories);
+		return response.status(200).json(categoryWithSubCategories);
 	},
 
 	async createCategory (request, response) {
@@ -45,7 +45,7 @@ export default {
 			return response.status(400).json({ error: "Catégorie déjà existante" });
 		}
 
-		return response.json(newCategory);
+		return response.status(200).json(newCategory);
 	},
 
 
@@ -58,7 +58,7 @@ export default {
 			return response.status(404).json({ error: "Catégorie inconnue" });
 		}
         
-		return response.json(modifyCategory);
+		return response.status(200).json(modifyCategory);
 
 	},
 
