@@ -1,3 +1,16 @@
 {
-    "git.ignoreLimitWarning": true
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"server": "localhost",
+			"port": 5432,
+			"driver": "PostgreSQL",
+			"name": "a2p",
+			"database": "a2p",
+			"username": "alex",
+			"password": "alex"
+		}
+	]
 }

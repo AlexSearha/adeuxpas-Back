@@ -49,7 +49,6 @@ npm run dev
 - MULTER (gestion des datas incorporées dans les requetes POST)
 - URL (Gestion des urls)
 
-
 ### APIs
 
 - YYELP FUSION (API hotels, restaurants & supermarchés)

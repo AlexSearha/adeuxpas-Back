@@ -2,62 +2,61 @@ import activityDatamapper from "../models/activityDatamapper.js";
 //import { ApiError } from "../helpers/errorHandler.js";
 
 export default {
-	
-	async getAllActivities(request, response) {
-		const activities = await activityDatamapper.findAll();
-		console.log(activities);
-        
-		return response.json(activities);
-	},
+  async getAllActivities(request, response) {
+    const activities = await activityDatamapper.findAll();
+    // console.log(activities);
 
-	async activity(request, response) {
-		const activity = await activityDatamapper.findByPk(request.params.id);
-		console.log(activity);
-		
-		if(!activity) {
-			//throw new apiService("Catégorie inconnue", { statusCode: 404 });
-			return response.status(404).json({ error: "Activité inconnue" });
-		}
+    return response.json(activities);
+  },
 
-		return response.json(activity);
+  async activity(request, response) {
+    const activity = await activityDatamapper.findByPk(request.params.id);
+    // console.log(activity);
 
-		
-	},
+    if (!activity) {
+      //throw new apiService("Catégorie inconnue", { statusCode: 404 });
+      return response.status(404).json({ error: "Activité inconnue" });
+    }
 
-	async createActivity(request, response) {
-		const newActivity = await activityDatamapper.insert(request.body);
-		console.log(newActivity);
+    return response.json(activity);
+  },
 
-		if(!newActivity) {
-			//throw new ApiError("Activité déjà existante", { statusCode: 400 });
-			return response.status(404).json({ error: "Activité déjà existante" });
-		}
+  async createActivity(request, response) {
+    const newActivity = await activityDatamapper.insert(request.body);
+    // console.log(newActivity);
 
-		return response.json(newActivity);
-	},
+    if (!newActivity) {
+      //throw new ApiError("Activité déjà existante", { statusCode: 400 });
+      return response.status(404).json({ error: "Activité déjà existante" });
+    }
 
-	async modifyActivity(request, response) {
-		const modifyActivity = await activityDatamapper.update(request.params.id, request.body);
-		console.log(modifyActivity);
+    return response.json(newActivity);
+  },
 
-		if(!modifyActivity) {
-			//throw new ApiError("Activité inconnue", { statusCode: 404 });
-			return response.status(404).json({ error: "Activité inconnue" });
-		}
+  async modifyActivity(request, response) {
+    const modifyActivity = await activityDatamapper.update(
+      request.params.id,
+      request.body,
+    );
+    // console.log(modifyActivity);
 
-		return response.json(modifyActivity);
-	},
+    if (!modifyActivity) {
+      //throw new ApiError("Activité inconnue", { statusCode: 404 });
+      return response.status(404).json({ error: "Activité inconnue" });
+    }
 
-	async deleteActivity(request, response) {
-		const deleteActivity = await activityDatamapper.delete(request.params.id);
-		console.log(deleteActivity);
+    return response.json(modifyActivity);
+  },
 
-		if(!deleteActivity) {
-			//throw new ApiError("Activité inconnue", { statusCode: 404 });
-			return response.status(404).json({ error: "Activité inconnue" });
-		}
+  async deleteActivity(request, response) {
+    const deleteActivity = await activityDatamapper.delete(request.params.id);
+    // console.log(deleteActivity);
 
-		return response.status(204).json(deleteActivity);
-	},
+    if (!deleteActivity) {
+      //throw new ApiError("Activité inconnue", { statusCode: 404 });
+      return response.status(404).json({ error: "Activité inconnue" });
+    }
 
+    return response.status(204).json(deleteActivity);
+  },
 };

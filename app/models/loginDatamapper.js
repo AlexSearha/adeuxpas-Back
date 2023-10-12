@@ -5,5 +5,5 @@ export default {
 		const index = await client.query("SELECT * FROM member");
 
 		return index.rows;
-	}
+	},
 };

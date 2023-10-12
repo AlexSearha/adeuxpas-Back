@@ -2,46 +2,42 @@ import client from "../helpers/pg.driver.js";
 import bcrypt from "bcrypt";
 
 export default {
-
-	async getResult(id) {
-		const getResult = await client.query(
-			`
+  async getResult(id) {
+    const getResult = await client.query(
+      `
 			SELECT * FROM
 			member
 			WHERE 
 			id = $1
 			`,
-			[id],
-		);
-		return getResult.rows;
-	},
-	
-	async findAll() {
-		const findAll = await client.query("SELECT * FROM member");
+      [id],
+    );
+    return getResult.rows;
+  },
 
-		return findAll.rows;
-	},
+  async findAll() {
+    const findAll = await client.query("SELECT * FROM member");
 
-    
-	async findByPk(id) {
-		const findByPk = await client.query(
-			"SELECT * FROM member WHERE id = $1", 
-			[id],
-		);
+    return findAll.rows;
+  },
 
-		if (findByPk.rowCount === 0){
-			return undefined;
-		}
+  async findByPk(id) {
+    const findByPk = await client.query("SELECT * FROM member WHERE id = $1", [
+      id,
+    ]);
 
-		return findByPk.rows[0];
-	},
+    if (findByPk.rowCount === 0) {
+      return undefined;
+    }
 
-    
-	async insert(member) {
-		console.log(member);
-		const hashedPassword = await bcrypt.hash(member.password, 10);
-		const insertMember = await client.query(
-			`
+    return findByPk.rows[0];
+  },
+
+  async insert(member) {
+    console.log(member);
+    const hashedPassword = await bcrypt.hash(member.password, 10);
+    const insertMember = await client.query(
+      `
             INSERT INTO member 
             (
 				firstname, lastname, 
@@ -55,52 +51,49 @@ export default {
             ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             RETURNING *
             `,
-			[
-				member.firstname, 
-				member.lastname, 
-				member.email, 
-				hashedPassword,
-				member.dateofbirth,
-				member.phone_number,
-				member.photo, 
-				member.address, 
-				member.zipcode, 
-				member.city, 
-				member.country
-			],
-		);
+      [
+        member.firstname,
+        member.lastname,
+        member.email,
+        hashedPassword,
+        member.dateofbirth,
+        member.phone_number,
+        member.photo,
+        member.address,
+        member.zipcode,
+        member.city,
+        member.country,
+      ],
+    );
 
-		return insertMember.rows[0];
+    return insertMember.rows[0];
+  },
 
-	},
-    
-    
-	async update(id, member) {
-		const fields = Object.keys(member).map((prop, index) => `"${prop}" = $${index + 1}`);
-		const values = Object.values(member);
+  async update(id, member) {
+    const fields = Object.keys(member).map(
+      (prop, index) => `"${prop}" = $${index + 1}`,
+    );
+    const values = Object.values(member);
 
-		const updateMember = await client.query(
-			`
+    const updateMember = await client.query(
+      `
 			UPDATE member SET 
 			${fields} 
 			WHERE id = $${fields.length + 1} 
 			RETURNING *
-           `,  [...values, id],
-		);
+           `,
+      [...values, id],
+    );
 
-		return updateMember.rows[0];
-    
-	},
-    
-    
-	async delete(id) {
-		const deleteMember = await client.query(
-			"DELETE FROM member WHERE id = $1",
-			[id],
-		);
-        
-		return !!deleteMember.rowCount;
-    
-	},
+    return updateMember.rows[0];
+  },
 
+  async delete(id) {
+    const deleteMember = await client.query(
+      "DELETE FROM member WHERE id = $1",
+      [id],
+    );
+
+    return !!deleteMember.rowCount;
+  },
 };

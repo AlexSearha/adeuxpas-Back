@@ -1,29 +1,28 @@
 import client from "../helpers/pg.driver.js";
 
 export default {
-    
-	async findAll() {
-		const findAll = await client.query("SELECT * FROM category");
-        
-		return findAll.rows;
-	},
+  async findAll() {
+    const findAll = await client.query("SELECT * FROM category");
 
-	async findByPk(id) {
-		const findByPk = await client.query(
-			"SELECT * FROM category WHERE id = $1", 
-			[id],
-		);
+    return findAll.rows;
+  },
 
-		if (findByPk.rowCount === 0){
-			return undefined;
-		}
+  async findByPk(id) {
+    const findByPk = await client.query(
+      "SELECT * FROM category WHERE id = $1",
+      [id],
+    );
 
-		return findByPk.rows[0];
-	},
-    
-	async findAllByPk(id) {
-		const findAllByPk = await client.query(
-			`
+    if (findByPk.rowCount === 0) {
+      return undefined;
+    }
+
+    return findByPk.rows[0];
+  },
+
+  async findAllByPk(id) {
+    const findAllByPk = await client.query(
+      `
             SELECT 
             category.label AS name,  
             json_agg(
@@ -42,56 +41,56 @@ export default {
             category.id = $1
             GROUP by category.label
             `,
-			[id],
-		);
-       
-		if (findAllByPk.rowCount === 0) {
-			return undefined;
-		}
+      [id],
+    );
 
-		return findAllByPk.rows[0];
-	}, 
+    if (findAllByPk.rowCount === 0) {
+      return undefined;
+    }
 
-	async insert(category) {
-		console.log(category);
-        
-		const insertCategory = await client.query(
-			`
+    return findAllByPk.rows[0];
+  },
+
+  async insert(category) {
+    console.log(category);
+
+    const insertCategory = await client.query(
+      `
             INSERT INTO category
             (label) 
             VALUES
             ($1) 
             RETURNING *
             `,
-			[category.label],
-		);
+      [category.label],
+    );
 
-		return insertCategory.rows[0];
-	},
+    return insertCategory.rows[0];
+  },
 
-	async update(id, category) {
-		console.log(category);
-        
-		const updateCategory = await client.query(
-			`
+  async update(id, category) {
+    console.log(category);
+
+    const updateCategory = await client.query(
+      `
             UPDATE category 
             SET 
             label = $1 
             WHERE id = $2
             RETURNING *
             `,
-			[category.label, id],
-		);
+      [category.label, id],
+    );
 
-		return updateCategory.rows[0];
-	},
-    
-	async delete(id) {
-		const deleteCategory = await client.query(
-			"DELETE FROM category WHERE id= $1",
-			[id],
-		);
-        
-		return !!deleteCategory.rowCount;
-	},
+    return updateCategory.rows[0];
+  },
+
+  async delete(id) {
+    const deleteCategory = await client.query(
+      "DELETE FROM category WHERE id= $1",
+      [id],
+    );
+
+    return !!deleteCategory.rowCount;
+  },
 };
