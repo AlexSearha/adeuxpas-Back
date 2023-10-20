@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
-function jwtTokens(test) {
-	const { email, role_id, id } = test;
+function generateJwtTokens(encodingDatas) {
+	const { email, role_id, id } = encodingDatas;
 	const data = {
 		email,
 		role_id,
@@ -17,4 +17,16 @@ function jwtTokens(test) {
 	return { accessToken, refreshToken };
 }
 
-export { jwtTokens };
+function testJwtValidity(token) {
+	return new Promise((resolve, reject) => {
+		jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(decoded);
+			}
+		});
+	});
+}
+
+export { generateJwtTokens, testJwtValidity };

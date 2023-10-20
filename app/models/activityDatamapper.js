@@ -1,58 +1,58 @@
 import client from "../helpers/pg.driver.js";
 
 export default {
-  async findAll() {
-    const findAll = await client.query("SELECT * FROM activity");
+	async findAll() {
+		const findAll = await client.query("SELECT * FROM activity");
 
-    return findAll.rows;
-  },
+		return findAll.rows;
+	},
 
-  async findByPk(id) {
-    const findByPk = await client.query(
-      `
+	async findByPk(id) {
+		const findByPk = await client.query(
+			`
 			SELECT * FROM 
 			activity 
 			WHERE id = $1 
 			`,
-      [id],
-    );
+			[id]
+		);
 
-    if (findByPk.rowCount === 0) {
-      return undefined;
-    }
+		if (findByPk.rowCount === 0) {
+			return undefined;
+		}
 
-    return findByPk.rows[0];
-  },
+		return findByPk.rows[0];
+	},
 
-  async insert(activity) {
-    console.log(activity);
+	async insert(activity) {
+		console.log(activity);
 
-    const insertActivity = await client.query(
-      `
+		const insertActivity = await client.query(
+			`
             INSERT INTO activity 
             (label, address, latitude, longitude, photo, sub_category_id) 
             VALUES 
             ($1, $2, $3, $4, $5, $6) 
             RETURNING *
             `,
-      [
-        activity.label,
-        activity.address,
-        activity.latitude,
-        activity.longitude,
-        activity.photo,
-        activity.sub_category_id,
-      ],
-    );
+			[
+				activity.label,
+				activity.address,
+				activity.latitude,
+				activity.longitude,
+				activity.photo,
+				activity.sub_category_id,
+			]
+		);
 
-    return insertActivity.rows;
-  },
+		return insertActivity.rows;
+	},
 
-  async update(id, activity) {
-    console.log(activity);
+	async update(id, activity) {
+		console.log(activity);
 
-    const updateActivity = await client.query(
-      `
+		const updateActivity = await client.query(
+			`
             UPDATE activity 
             SET
             label = $1,
@@ -64,30 +64,30 @@ export default {
 			WHERE id = $7
 			RETURNING *
             `,
-      [
-        activity.label,
-        activity.address,
-        activity.latitude,
-        activity.longitude,
-        activity.photo,
-        activity.sub_category_id,
-        id,
-      ],
-    );
+			[
+				activity.label,
+				activity.address,
+				activity.latitude,
+				activity.longitude,
+				activity.photo,
+				activity.sub_category_id,
+				id,
+			]
+		);
 
-    return updateActivity.rows[0];
-  },
+		return updateActivity.rows[0];
+	},
 
-  async delete(id) {
-    const deleteActivity = await client.query(
-      `
+	async delete(id) {
+		const deleteActivity = await client.query(
+			`
 			DELETE FROM 
 			activity 
 			WHERE id = $1
 			`,
-      [id],
-    );
+			[id]
+		);
 
-    return !!deleteActivity.rowCount;
-  },
+		return !!deleteActivity.rowCount;
+	},
 };

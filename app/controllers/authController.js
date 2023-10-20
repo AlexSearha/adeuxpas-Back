@@ -1,7 +1,8 @@
 import loginDatamapper from "../models/loginDatamapper.js";
 import bcrypt from "bcrypt";
 import pool from "../helpers/pg.driver.js";
-import { jwtTokens } from "../helpers/jwt-helpers.js";
+import { generateJwtTokens, testJwtValidity } from "../helpers/jwt-helpers.js";
+import registerDatamapper from "../models/registerDatamapper.js";
 
 export default {
 	index: async (request, response) => {
@@ -29,7 +30,7 @@ export default {
 					.status(401)
 					.json({ error: "Incorrect password" });
 
-			let tokens = jwtTokens(users.rows[0]);
+			let tokens = generateJwtTokens(users.rows[0]);
 			response.setHeader("Authorization", `Bearer ${tokens.accessToken}`);
 			response.cookie("refresh_token", tokens.refreshToken, {
 				httpOnly: true,
@@ -60,6 +61,48 @@ export default {
 			response
 				.status(500)
 				.json({ error: "an error occurred when data where fetched" });
+		}
+	},
+
+	form: async (request, response) => {
+		const index = await registerDatamapper.form(request.body);
+		console.log(index);
+
+		return response.json(index);
+	},
+
+	register: async (request, response) => {
+		const register = await registerDatamapper.register(request.body);
+		console.log(register);
+
+		return response.json(register);
+	},
+
+	tokenValidity: async (request, response) => {
+		const refreshToken = request.cookies.refresh_token;
+		if (!refreshToken) {
+			return response.status(403).json({ message: "missing token" });
+		}
+		try {
+			const isValid = await testJwtValidity(refreshToken);
+			const { email, id, role_id } = isValid;
+
+			if (isValid.id) {
+				console.log("je rentre dans la condition");
+				const newToken = generateJwtTokens({
+					email: email,
+					id: id,
+					role_id: role_id,
+				});
+				console.log("newToken: ", newToken.accessToken);
+				response.setHeader(
+					"Authorization",
+					`Bearer ${newToken.accessToken}`
+				);
+				response.status(200).json({ message: "Token regenered" });
+			}
+		} catch (error) {
+			return response.status(403).json(error.message);
 		}
 	},
 };

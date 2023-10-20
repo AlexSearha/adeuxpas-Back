@@ -2,11 +2,11 @@ import { Router } from "express";
 
 import activityController from "../controllers/activityController.js";
 import categoryController from "../controllers/categoryController.js";
-import loginController from "../controllers/loginController.js";
 import memberController from "../controllers/memberController.js";
 import subCategoryController from "../controllers/subCategoryController.js";
 import fetchYelpController from "../controllers/fetchYelpController.js";
 import authMiddleware from "../helpers/auth.middleware.js";
+import authController from "../controllers/authController.js";
 
 const router = Router();
 
@@ -21,8 +21,11 @@ router.delete("/member/:id(\\d+)", memberController.deleteMember);
 
 //Authentification
 
-router.post("/login", loginController.login);
-router.get("/logout", loginController.logout);
+router.post("/login", authController.login);
+router.get("/logout", authController.logout);
+
+// tokens validity and regenerate
+router.get("/token-validity", authController.tokenValidity);
 
 //Category
 

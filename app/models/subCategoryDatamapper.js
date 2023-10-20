@@ -1,35 +1,35 @@
 import client from "../helpers/pg.driver.js";
 
 export default {
-  async findAll() {
-    const findAll = await client.query(
-      `
+	async findAll() {
+		const findAll = await client.query(
+			`
 			SELECT * FROM sub_category
-			`,
-    );
-    return findAll.rows;
-  },
+			`
+		);
+		return findAll.rows;
+	},
 
-  async findByPk(id) {
-    const findByPk = await client.query(
-      `
+	async findByPk(id) {
+		const findByPk = await client.query(
+			`
 			SELECT * FROM 
 			sub_category 
 			WHERE id = $1
 			`,
-      [id],
-    );
+			[id]
+		);
 
-    if (findByPk.rowCount === 0) {
-      return undefined;
-    }
+		if (findByPk.rowCount === 0) {
+			return undefined;
+		}
 
-    return findByPk.rows[0];
-  },
+		return findByPk.rows[0];
+	},
 
-  async findAllByPk(subCategoryId) {
-    const findAllByPk = await client.query(
-      `
+	async findAllByPk(subCategoryId) {
+		const findAllByPk = await client.query(
+			`
             SELECT 
             sub_category.label AS name,  
             json_agg(
@@ -52,48 +52,48 @@ export default {
             sub_category.id = $1 
             GROUP by sub_category.label
             `,
-      [subCategoryId],
-    );
+			[subCategoryId]
+		);
 
-    if (findAllByPk.rowCount === 0) {
-      return undefined;
-    }
+		if (findAllByPk.rowCount === 0) {
+			return undefined;
+		}
 
-    return findAllByPk.rows;
-  },
+		return findAllByPk.rows;
+	},
 
-  async insert(subcategory) {
-    console.log(subcategory);
+	async insert(subcategory) {
+		console.log(subcategory);
 
-    const insertSubCategory = await client.query(
-      `
+		const insertSubCategory = await client.query(
+			`
             INSERT INTO sub_category
             (label, category_id) 
             VALUES
             ($1, $2) 
             RETURNING *
             `,
-      [subcategory.label, subcategory.category_id],
-    );
+			[subcategory.label, subcategory.category_id]
+		);
 
-    return insertSubCategory.rows;
-  },
+		return insertSubCategory.rows;
+	},
 
-  async update(id, sub_category) {
-    const updateSubCategory = await client.query(
-      `
+	async update(id, sub_category) {
+		const updateSubCategory = await client.query(
+			`
 			UPDATE sub_category SET 
 			label = $1,
 			category_id = $2
 			WHERE id = $3
 			RETURNING *
 			`,
-      [sub_category.label, sub_category.category_id, id],
-    );
+			[sub_category.label, sub_category.category_id, id]
+		);
 
-    return updateSubCategory.rows[0];
+		return updateSubCategory.rows[0];
 
-    /* async update(id, visitor) {
+		/* async update(id, visitor) {
         const fields = Object.keys(visitor).map((prop, index) => "${prop}" = $${index + 1});
         const values = Object.values(visitor);
 
@@ -110,18 +110,18 @@ export default {
         return savedVisitor.rows[0];
     },
     */
-  },
+	},
 
-  async delete(id) {
-    const deleteSubCategory = await client.query(
-      `
+	async delete(id) {
+		const deleteSubCategory = await client.query(
+			`
 			DELETE FROM 
 			sub_category 
 			WHERE id = $1 
 			`,
-      [id],
-    );
+			[id]
+		);
 
-    return !!deleteSubCategory.rowCount;
-  },
+		return !!deleteSubCategory.rowCount;
+	},
 };
