@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import pool from "../helpers/pg.driver.js";
 import { generateJwtTokens, testJwtValidity } from "../helpers/jwt-helpers.js";
 import registerDatamapper from "../models/registerDatamapper.js";
+import memberDatamapper from "../models/memberDatamapper.js";
 
 export default {
 	index: async (request, response) => {
@@ -86,9 +87,10 @@ export default {
 		try {
 			const isValid = await testJwtValidity(refreshToken);
 			const { email, id, role_id } = isValid;
+			const user = await memberDatamapper.findByPk(id);
+			console.log("User infos: ", user);
 
-			if (isValid.id) {
-				console.log("je rentre dans la condition");
+			if (isValid.id && user) {
 				const newToken = generateJwtTokens({
 					email: email,
 					id: id,
@@ -99,7 +101,8 @@ export default {
 					"Authorization",
 					`Bearer ${newToken.accessToken}`
 				);
-				response.status(200).json({ message: "Token regenered" });
+				delete user.password;
+				response.status(200).json(user);
 			}
 		} catch (error) {
 			return response.status(403).json(error.message);

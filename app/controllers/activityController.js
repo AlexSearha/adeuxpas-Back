@@ -9,7 +9,7 @@ export default {
 		return response.json(activities);
 	},
 
-	async activity(request, response) {
+	async getActivityByPk(request, response) {
 		const activity = await activityDatamapper.findByPk(request.params.id);
 		// console.log(activity);
 

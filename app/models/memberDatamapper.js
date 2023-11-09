@@ -70,11 +70,11 @@ export default {
 		return insertMember.rows[0];
 	},
 
-	async update(id, member) {
-		const fields = Object.keys(member).map(
+	async update(id, body) {
+		const fields = Object.keys(body).map(
 			(prop, index) => `"${prop}" = $${index + 1}`
 		);
-		const values = Object.values(member);
+		const values = Object.values(body);
 
 		const updateMember = await client.query(
 			`

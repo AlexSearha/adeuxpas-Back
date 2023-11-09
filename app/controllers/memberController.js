@@ -37,6 +37,7 @@ export default {
 		return response.json(newMember);
 	},
 	async modifyMember(request, response) {
+		console.log("BODY: ", request.body);
 		const modifyMember = await memberDatamapper.update(
 			request.params.id,
 			request.body
