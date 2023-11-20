@@ -17,6 +17,18 @@ function generateJwtTokens(encodingDatas) {
 	return { accessToken, refreshToken };
 }
 
+function sendEmailResetPasswordJwt(encodingDatas) {
+	const { email, role_id, id } = encodingDatas;
+	const data = {
+		email,
+		role_id,
+		id,
+	};
+	return jwt.sign(data, process.env.RESET_PASSWORD_TOKEN_SECRET, {
+		expiresIn: 25 * 60,
+	});
+}
+
 function testJwtValidity(token) {
 	return new Promise((resolve, reject) => {
 		jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
@@ -29,4 +41,4 @@ function testJwtValidity(token) {
 	});
 }
 
-export { generateJwtTokens, testJwtValidity };
+export { generateJwtTokens, testJwtValidity, sendEmailResetPasswordJwt };

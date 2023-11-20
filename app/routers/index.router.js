@@ -41,6 +41,9 @@ router.get("/logout", authController.logout);
 // tokens validity and regenerate
 router.get("/token-validity", authController.tokenValidity);
 
+// Reset Passwords
+router.post("/reset-password", authController.resetPassword);
+
 //Category
 
 router.get(

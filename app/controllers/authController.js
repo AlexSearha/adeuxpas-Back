@@ -1,9 +1,14 @@
 import loginDatamapper from "../models/loginDatamapper.js";
 import bcrypt from "bcrypt";
 import pool from "../helpers/pg.driver.js";
-import { generateJwtTokens, testJwtValidity } from "../helpers/jwt-helpers.js";
+import {
+	generateJwtTokens,
+	sendEmailResetPasswordJwt,
+	testJwtValidity,
+} from "../helpers/jwt-helpers.js";
 import registerDatamapper from "../models/registerDatamapper.js";
 import memberDatamapper from "../models/memberDatamapper.js";
+import { emailReinitPassword } from "../helpers/nodemailer.js";
 
 export default {
 	index: async (request, response) => {
@@ -104,6 +109,35 @@ export default {
 				delete user.password;
 				response.status(200).json(user);
 			}
+		} catch (error) {
+			return response.status(403).json(error.message);
+		}
+	},
+
+	resetPassword: async (request, response) => {
+		const { email: bodyEmail } = request.body;
+		console.log("bodyEmail: ", bodyEmail);
+		console.log("RESET PASSWORD middleware");
+		try {
+			if (!bodyEmail) {
+				return response.status(400).json({ message: "missing email" });
+			}
+			const isEmailExist = await memberDatamapper.findByEmail(bodyEmail);
+			if (!isEmailExist) {
+				return response
+					.status(400)
+					.json({ message: "user does not exist" });
+			}
+			const generateTokenTosend = sendEmailResetPasswordJwt({
+				email: isEmailExist.email,
+				role_id: isEmailExist.role_id,
+				id: isEmailExist.id,
+			});
+			await emailReinitPassword(
+				"alexma225@hotmail.com",
+				generateTokenTosend
+			);
+			response.status(200).json();
 		} catch (error) {
 			return response.status(403).json(error.message);
 		}

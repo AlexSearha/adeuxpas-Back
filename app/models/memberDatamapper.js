@@ -34,6 +34,19 @@ export default {
 		return findByPk.rows[0];
 	},
 
+	async findByEmail(email) {
+		const findByPk = await client.query(
+			"SELECT * FROM member WHERE email = $1",
+			[email]
+		);
+
+		if (findByPk.rowCount === 0) {
+			return undefined;
+		}
+
+		return findByPk.rows[0];
+	},
+
 	async insert(member) {
 		console.log(member);
 		const hashedPassword = await bcrypt.hash(member.password, 10);
