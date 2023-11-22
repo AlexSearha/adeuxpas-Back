@@ -1,5 +1,6 @@
 import loginDatamapper from "../models/loginDatamapper.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import pool from "../helpers/pg.driver.js";
 import {
 	generateJwtTokens,
@@ -128,18 +129,59 @@ export default {
 					.status(400)
 					.json({ message: "user does not exist" });
 			}
-			const generateTokenTosend = sendEmailResetPasswordJwt({
+			const generateTokenToSend = sendEmailResetPasswordJwt({
 				email: isEmailExist.email,
 				role_id: isEmailExist.role_id,
 				id: isEmailExist.id,
 			});
+			const tokenModifyFormat = generateTokenToSend.split(".").join("*");
 			await emailReinitPassword(
 				"alexma225@hotmail.com",
-				generateTokenTosend
+				tokenModifyFormat
 			);
 			response.status(200).json();
 		} catch (error) {
 			return response.status(403).json(error.message);
 		}
 	},
+
+	// ...
+	updatePassword: async (request, response) => {
+		const { token, password } = request.body;
+
+		try {
+			if (!token || !password) {
+				return response
+					.status(401)
+					.json({ error: "Token or password is missing" });
+			}
+
+			const changeTokenFormat = token.split("*").join(".");
+			const decodeTokenInfos = jwt.verify(
+				changeTokenFormat,
+				process.env.RESET_PASSWORD_TOKEN_SECRET
+			);
+
+			const isUserExist = await memberDatamapper.findByEmail(
+				decodeTokenInfos.email
+			);
+
+			if (!isUserExist) {
+				return response
+					.status(401)
+					.json({ error: "User does not exist" });
+			}
+
+			const hashedPassword = await bcrypt.hash(password, 10);
+
+			await memberDatamapper.update(isUserExist.id, {
+				password: hashedPassword,
+			});
+
+			response.status(200).json();
+		} catch (error) {
+			response.status(401).json({ error: error.message });
+		}
+	},
+	// ...
 };

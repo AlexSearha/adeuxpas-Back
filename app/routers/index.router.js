@@ -43,6 +43,7 @@ router.get("/token-validity", authController.tokenValidity);
 
 // Reset Passwords
 router.post("/reset-password", authController.resetPassword);
+router.patch("/change-password", authController.updatePassword);
 
 //Category
 
