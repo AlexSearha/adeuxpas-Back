@@ -24,6 +24,22 @@ export default {
 		return findAll.rows;
 	},
 
+	async findByAddress(address) {
+		const findByName = await client.query(
+			`
+		    SELECT * FROM
+		    search_result
+		    WHERE address_destination = $1
+		`,
+			[address]
+		);
+
+		if (findByName.rowCount === 0) {
+			return undefined;
+		}
+		return findByName.rows[0];
+	},
+
 	async findByPk(ids) {
 		const { userId, favoriteId } = ids;
 		const oneFavorite = await client.query(

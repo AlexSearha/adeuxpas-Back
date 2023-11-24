@@ -117,7 +117,6 @@ export default {
 
 	resetPassword: async (request, response) => {
 		const { email: bodyEmail } = request.body;
-		console.log("bodyEmail: ", bodyEmail);
 		console.log("RESET PASSWORD middleware");
 		try {
 			if (!bodyEmail) {

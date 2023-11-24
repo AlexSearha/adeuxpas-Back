@@ -17,10 +17,35 @@ const transporter = nodemailer.createTransport({
 export async function emailReinitPassword(emailTo, token) {
 	const info = await transporter.sendMail({
 		// eslint-disable-next-line quotes
-		from: '"adeuxpas" <contact@mytechcompanion.fr>', // sender address
-		to: emailTo, // list of receivers
-		subject: "Reinitialisation de votre mot de passe", // Subject line
-		html: `<p>Bonjour,</p><br><p>Veuillez cliquer sur le lien suivant pour reinitialiser votre mot de passe : <span><a href="http://localhost:5173/reset-password/${token}">http://localhost:5173/reset-password/${token}</a></span></p><br>Ce lien sera valable pendant 25 minutes,au dela, il vous sera demander de reiterer votre demande de changement de mot de passe<p>Cordialement,</p><br><p>Katia Lemaire Sophrologue<br>22 rue des tisserands, 56190 Noyal-Muzillac<br>Tel: 07.60.31.10.52</p>`, // html body
+		from: '"adeuxpas" <contact@mytechcompanion.fr>',
+		to: emailTo,
+		subject: "Réinitialisation de votre mot de passe",
+		html: `
+		<p>Bonjour,</p>
+		<p>Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe : <a href="http://localhost:5173/reset-password/${token}">http://localhost:5173/reset-password/${token}</a></p>
+		<p>Ce lien sera valable pendant 25 minutes, au-delà, il vous sera demandé de réitérer votre demande de changement de mot de passe.</p>
+		<p>Cordialement,<br>L'équipe Adeuxpas</p>
+	  `,
+	});
+
+	console.log("Message sent: %s", info.messageId);
+}
+
+export async function emailContactForm(body) {
+	const { firstname, email, message } = body;
+	const info = await transporter.sendMail({
+		// eslint-disable-next-line quotes
+		from: '"adeuxpas" <contact@mytechcompanion.fr>',
+		to: "alexis.marouf@hotmail.fr",
+		subject: "Nouveau message de formulaire de contact",
+		html: `
+		<p>Nouveau message de formulaire de contact reçu:</p>
+  
+		<p><strong>Nom:</strong> ${firstname}</p>
+		<p><strong>Email:</strong> ${email}</p>
+		<p><strong>Message:</strong></p>
+		<p>${message}</p>
+	  `,
 	});
 
 	console.log("Message sent: %s", info.messageId);

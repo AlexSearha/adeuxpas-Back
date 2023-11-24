@@ -16,6 +16,15 @@ export default {
 		return response.status(200).json(favorites);
 	},
 
+	async getFavoriteByAddress(request, response) {
+		const favoriteByAddress = await favoriteDatamapper.findByAddress(
+			request.body.address_destination
+		);
+		console.log("favoriteByAddress: ", favoriteByAddress);
+
+		return response.status(200).json(favoriteByAddress);
+	},
+
 	async getOneFavorite(request, response) {
 		const oneFavorite = await favoriteDatamapper.findByPk(request.params);
 		console.log("oneFavorite: ", oneFavorite);

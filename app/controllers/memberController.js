@@ -1,3 +1,4 @@
+import { emailContactForm } from "../helpers/nodemailer.js";
 import memberDatamapper from "../models/memberDatamapper.js";
 
 export default {
@@ -61,5 +62,14 @@ export default {
 		}
 
 		return response.status(204).json(deleteMember);
+	},
+
+	contactForm: async (request, response) => {
+		try {
+			await emailContactForm(request.body);
+			response.status(200).json("email sent");
+		} catch (error) {
+			return response.status(403).json(error.message);
+		}
 	},
 };

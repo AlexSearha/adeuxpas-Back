@@ -28,13 +28,16 @@ router.get(
 	"/member/:userId(\\d+)/favorite/:favoriteId",
 	favoriteController.getOneFavorite
 );
+router.post(
+	"/member/:userId(\\d+)/favoriteAddress/",
+	favoriteController.getFavoriteByAddress
+);
 router.delete(
 	"/member/:userId(\\d+)/favorite/:favoriteId(\\d+)",
 	favoriteController.deleteOneFavorite
 );
 
 //Authentification
-
 router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 
@@ -46,7 +49,6 @@ router.post("/reset-password", authController.resetPassword);
 router.patch("/change-password", authController.updatePassword);
 
 //Category
-
 router.get(
 	"/category",
 	authMiddleware.auth,
@@ -62,7 +64,6 @@ router.patch("/category/:id(\\d+)", categoryController.modifyCategory);
 router.delete("/category/:id(\\d+)", categoryController.deleteCategory);
 
 //subCategory
-
 router.get("/sub_category", subCategoryController.getAllSubCategories);
 router.get("/sub_category/:id(\\d+)", subCategoryController.getSubCategoryByPk);
 // router.get(
@@ -80,7 +81,6 @@ router.delete(
 );
 
 //activity
-
 router.get("/activity", activityController.getAllActivities);
 router.get("/activity/:id(\\d+)", activityController.getActivityByPk);
 router.post("/activity", activityController.createActivity);
@@ -88,7 +88,9 @@ router.patch("/activity/:id(\\d+)", activityController.modifyActivity);
 router.delete("/activity/:id(\\d+)", activityController.deleteActivity);
 
 // fetchYelp
-
 router.post("/yelp", fetchYelpController.getFetchYelp);
+
+//Contact
+router.post("/contact", memberController.contactForm);
 
 export default router;
